@@ -5,6 +5,7 @@ go 1.25.3
 require (
 	github.com/go-playground/validator/v10 v10.30.3
 	github.com/gofiber/fiber/v2 v2.52.14
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.4
 	github.com/spf13/viper v1.21.0
 	github.com/swaggo/fiber-swagger v1.3.0
