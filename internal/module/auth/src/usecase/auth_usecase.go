@@ -41,6 +41,23 @@ func NewAuthUseCase(
 	}
 }
 
+func (c *AuthUseCase) Current(ctx context.Context, id string) (*model.UserResponse, error) {
+	tx := c.DB.WithContext(ctx)
+
+	if err := c.Validate.Var(id, "required"); err != nil {
+		c.Log.Warnf("Invalid request body : %+v", err)
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
+	}
+
+	user := new(entity.User)
+	if err := c.UserRepository.FindById(tx, user, id); err != nil {
+		c.Log.Warnf("Failed find user by id : %+v", err)
+		return nil, fiber.NewError(fiber.StatusNotFound, "User tidak ditemukan")
+	}
+
+	return converter.UserToResponse(user), nil
+}
+
 func (u *AuthUseCase) Register(ctx context.Context, request *model.RegisterRequest) (*model.AuthResponse, error) {
 	tx := u.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
