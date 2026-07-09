@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/model"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/usecase"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/middleware"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/response"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
@@ -18,6 +19,22 @@ func NewAuthController(useCase *usecase.AuthUseCase, logger *logrus.Logger) *Aut
 		Log:     logger,
 		UseCase: useCase,
 	}
+}
+
+func (c *AuthController) Current(ctx *fiber.Ctx) error {
+	auth := middleware.GetUser(ctx)
+
+	resp, err := c.UseCase.Current(ctx.UserContext(), auth.ID)
+	if err != nil {
+		c.Log.Warnf("Failed to get current user : %+v", err)
+		return err
+	}
+
+	return ctx.JSON(response.WebResponse[*model.UserResponse]{
+		Data:    resp,
+		Message: "Get current user successful",
+		Success: true,
+	})
 }
 
 func (c *AuthController) Register(ctx *fiber.Ctx) error {
