@@ -8,9 +8,9 @@ import (
 	module "github.com/PetaFlops-web/backend-shop-smbk/internal/shared/module"
 )
 
-// @title           Golang Modular Monolith API
+// @title           AIC Backend API
 // @version         1.0
-// @description     API Documentation for Golang Modular Monolith template.
+// @description     API Documentation for AIC Backend.
 
 // @BasePath  /api
 
