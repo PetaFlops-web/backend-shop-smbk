@@ -1,0 +1,30 @@
+{
+  "app": {
+    "name": "your_app_name"
+  },
+  "web": {
+    "prefork": false,
+    "port": 8080
+  },
+  "log": {
+    "level": 6
+  },
+  "database": {
+    "username": "your_db_user",
+    "password": "your_db_password",
+    "host": "localhost",
+    "port": 3306,
+    "name": "your_db_name",
+    "pool": {
+      "idle": 10,
+      "max": 100,
+      "lifetime": 300
+    }
+  },
+  "jwt": {
+    "secret": "your_jwt_secret_key"
+  },
+  "group": {
+    "id": "your_group_id"
+  }
+}
