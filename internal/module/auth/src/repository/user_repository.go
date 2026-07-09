@@ -25,3 +25,11 @@ func (r *UserRepository) CountByUsernameOrEmail(db *gorm.DB, username string, em
 	err := db.Model(&entity.User{}).Where("username = ? OR email = ?", username, email).Count(&count).Error
 	return count, err
 }
+
+
+func (r *UserRepository) CountByUsername(db *gorm.DB, username any) (int64, error) {
+	var total int64
+
+	err := db.Model(new(entity.User)).Where("id = ?", username).Count(&total).Error
+	return total, err
+}

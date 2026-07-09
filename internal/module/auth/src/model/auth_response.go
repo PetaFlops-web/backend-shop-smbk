@@ -2,7 +2,7 @@ package model
 
 type UserResponse struct {
 	ID        string `json:"id"`
-	Name      string `json:"username"`
+	Username  string `json:"username"`
 	Email     string `json:"email"`
 	CreatedAt int64  `json:"created_at"`
 	UpdatedAt int64  `json:"updated_at"`
