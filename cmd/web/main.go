@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/config"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/middleware"
 	module "github.com/PetaFlops-web/backend-shop-smbk/internal/shared/module"
@@ -20,20 +21,20 @@ import (
 func main() {
 	viperConfig := config.NewViper()
 	log := config.NewLogger(viperConfig)
-	// db := config.NewDatabase(viperConfig, log)
-	// validate := config.NewValidator(viperConfig)
+	db := config.NewDatabase(viperConfig, log)
+	validate := config.NewValidator(viperConfig)
 	app := config.NewFiber(viperConfig)
 
 
 	// Auth Middleware
-	authMw := middleware.AuthMiddleware(viperConfig)
+	authMiddleware := middleware.AuthMiddleware(viperConfig)
 
 	// Module initialization (ordered by dependency)
-	
+	authModule := auth.New(db, log, validate, viperConfig)
 
 	// Register all modules
 	modules := []module.Module{
-
+		authModule,
 	}
 
 	// Auto-migration (each module migrates its own tables)
@@ -46,7 +47,7 @@ func main() {
 	// Route registration
 	api := app.Group("/api")
 	for _, m := range modules {
-		m.RegisterRoutes(api, authMw)
+		m.RegisterRoutes(api, authMiddleware)
 	}
 
 	// Start server
