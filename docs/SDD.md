@@ -205,14 +205,12 @@ Contoh response error:
 
 ### 6.1 Modul `auth` — tabel `users`
 
-| Field                   | Tipe          | Keterangan             |
-| ----------------------- | ------------- | ---------------------- |
-| id                      | string (UUID) | Primary key            |
-| name                    | string        | Nama pedagang          |
-| email                   | string        | Unique                 |
-| oauth_provider          | string        | mis. google            |
-| oauth_id                | string        | ID dari provider OAuth |
-| created_at / updated_at | timestamp     | Audit field            |
+| Field                   | Tipe          | Keterangan  |
+| ----------------------- | ------------- | ----------- |
+| id                      | string (UUID) | Primary key |
+| username                | string        | Username    |
+| email                   | string        | Unique      |
+| created_at / updated_at | timestamp     | Audit field |
 
 ### 6.2 Modul `store` — tabel `stores`
 
@@ -220,7 +218,7 @@ Contoh response error:
 | ----------------------- | ------------- | ------------------------------------------ |
 | id                      | string (UUID) | Primary key                                |
 | owner_id                | string        | Reference ke users.id (plain ID, bukan FK) |
-| nama_toko               | string        | Nama toko                                  |
+| store_name              | string        | Nama toko                                  |
 | created_at / updated_at | timestamp     | Audit field                                |
 
 ### 6.3 Modul `product` — tabel `products`
@@ -229,11 +227,11 @@ Contoh response error:
 | ----------------------- | ------------- | -------------------------------------------- |
 | id                      | string (UUID) | Primary key                                  |
 | store_id                | string        | Reference ke stores.id (plain ID)            |
-| nama_produk             | string        | Nama produk                                  |
-| harga_modal             | bigint        | Harga modal saat ini (rupiah, tanpa desimal) |
-| harga_jual              | bigint        | Harga jual saat ini                          |
-| stok                    | int           | Stok saat ini, di-decrement tiap transaksi   |
-| satuan                  | string        | mis. kg, pcs, liter                          |
+| product_name            | string        | Nama produk                                  |
+| cost_price              | bigint        | Harga modal saat ini (rupiah, tanpa desimal) |
+| selling_price           | bigint        | Harga jual saat ini                          |
+| stock                   | int           | Stok saat ini, di-decrement tiap transaksi   |
+| unit                    | string        | mis. kg, pcs, liter                          |
 | created_at / updated_at | timestamp     | Audit field                                  |
 
 ### 6.4 Modul `transaction` — tabel `transactions`
@@ -248,15 +246,15 @@ Contoh response error:
 
 ### 6.5 Modul `transaction` — tabel `transaction_items`
 
-| Field                      | Tipe          | Keterangan                                                             |
-| -------------------------- | ------------- | ---------------------------------------------------------------------- |
-| id                         | string (UUID) | Primary key                                                            |
-| transaction_id             | string        | FK ke transactions.id — valid karena satu modul yang sama              |
-| product_id                 | string        | Reference ke products.id (plain ID, lintas modul)                      |
-| product_name_snapshot      | string        | Nama produk saat transaksi, untuk jaga-jaga bila produk diubah/dihapus |
-| qty                        | int           | Jumlah unit terjual                                                    |
-| harga_modal_saat_transaksi | bigint        | Snapshot harga modal saat transaksi — dasar hitung untung              |
-| harga_jual_saat_transaksi  | bigint        | Snapshot harga jual saat transaksi                                     |
+| Field                  | Tipe          | Keterangan                                                             |
+| ---------------------- | ------------- | ---------------------------------------------------------------------- |
+| id                     | string (UUID) | Primary key                                                            |
+| transaction_id         | string        | FK ke transactions.id — valid karena satu modul yang sama              |
+| product_id             | string        | Reference ke products.id (plain ID, lintas modul)                      |
+| product_name_snapshot  | string        | Nama produk saat transaksi, untuk jaga-jaga bila produk diubah/dihapus |
+| qty                    | int           | Jumlah unit terjual                                                    |
+| cost_price_snapshot    | bigint        | Snapshot harga modal saat transaksi — dasar hitung untung              |
+| selling_price_snapshot | bigint        | Snapshot harga jual saat transaksi                                     |
 
 ### 6.6 Modul `restock` — tabel `restock_predictions`
 
@@ -302,49 +300,50 @@ Setiap modul mengekspos interface publik yang dipakai modul lain, tanpa membuka 
 
 ### 8.1 Modul `auth`
 
-| Method | Endpoint                    | Deskripsi                                                | Auth   |
-| ------ | --------------------------- | -------------------------------------------------------- | ------ |
-| POST   | /api/v1/auth/oauth/callback | Callback OAuth — buat user bila belum ada, terbitkan JWT | Public |
-| GET    | /api/v1/auth/me             | Ambil profil user yang sedang login                      | JWT    |
+| Method | Endpoint             | Deskripsi                           | Auth |
+| ------ | -------------------- | ----------------------------------- | ---- |
+| POST   | /api/users           | Register                            | -    |
+| POST   | /api/users/\_login   | Login                               | -    |
+| GET    | /api/users/\_current | Ambil profil user yang sedang login | JWT  |
 
 ### 8.2 Modul `store`
 
-| Method | Endpoint          | Deskripsi                               | Auth |
-| ------ | ----------------- | --------------------------------------- | ---- |
-| POST   | /api/v1/stores    | Membuat toko baru untuk user yang login | JWT  |
-| GET    | /api/v1/stores/me | Ambil data toko milik user yang login   | JWT  |
+| Method | Endpoint    | Deskripsi                               | Auth |
+| ------ | ----------- | --------------------------------------- | ---- |
+| POST   | /api/stores | Membuat toko baru untuk user yang login | JWT  |
+| GET    | /api/stores | Ambil data toko milik user yang login   | JWT  |
 
 ### 8.3 Modul `product`
 
-| Method | Endpoint             | Deskripsi                          | Auth |
-| ------ | -------------------- | ---------------------------------- | ---- |
-| POST   | /api/v1/products     | Tambah produk baru (FR-03)         | JWT  |
-| GET    | /api/v1/products     | List produk milik toko (paginated) | JWT  |
-| GET    | /api/v1/products/:id | Detail satu produk                 | JWT  |
-| PUT    | /api/v1/products/:id | Update produk (harga, stok, dll)   | JWT  |
-| DELETE | /api/v1/products/:id | Hapus produk                       | JWT  |
+| Method | Endpoint          | Deskripsi                          | Auth |
+| ------ | ----------------- | ---------------------------------- | ---- |
+| POST   | /api/products     | Tambah produk baru (FR-03)         | JWT  |
+| GET    | /api/products     | List produk milik toko (paginated) | JWT  |
+| GET    | /api/products/:id | Detail satu produk                 | JWT  |
+| PUT    | /api/products/:id | Update produk (harga, stok, dll)   | JWT  |
+| DELETE | /api/products/:id | Hapus produk                       | JWT  |
 
 ### 8.4 Modul `transaction`
 
-| Method | Endpoint                           | Deskripsi                                                                                                           | Auth |
-| ------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---- |
-| POST   | /api/v1/transactions/extract/voice | Upload audio → proxy ke layanan ML (Whisper+NLP) → matching produk → return preview (belum tersimpan) (FR-06–FR-10) | JWT  |
-| POST   | /api/v1/transactions/extract/photo | Upload foto nota → proxy ke layanan OCR+NLP → matching produk → return preview (FR-12–FR-15)                        | JWT  |
-| POST   | /api/v1/transactions               | Konfirmasi & simpan transaksi + item + decrement stok (FR-11, FR-05)                                                | JWT  |
-| GET    | /api/v1/transactions               | List riwayat transaksi toko (paginated, untuk kebutuhan debugging/QA)                                               | JWT  |
+| Method | Endpoint                        | Deskripsi                                                                                                           | Auth |
+| ------ | ------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---- |
+| POST   | /api/transactions/extract/voice | Upload audio → proxy ke layanan ML (Whisper+NLP) → matching produk → return preview (belum tersimpan) (FR-06–FR-10) | JWT  |
+| POST   | /api/transactions/extract/photo | Upload foto nota → proxy ke layanan OCR+NLP → matching produk → return preview (FR-12–FR-15)                        | JWT  |
+| POST   | /api/transactions               | Konfirmasi & simpan transaksi + item + decrement stok (FR-11, FR-05)                                                | JWT  |
+| GET    | /api/transactions               | List riwayat transaksi toko (paginated, untuk kebutuhan debugging/QA)                                               | JWT  |
 
 ### 8.5 Modul `report`
 
-| Method | Endpoint                              | Deskripsi                                                                                                                       | Auth |
-| ------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---- |
-| GET    | /api/v1/reports/daily?date=YYYY-MM-DD | Laporan harian: total omset, total untung, jumlah transaksi, produk terlaris, sisa stok (FR-16–FR-20). Default date = hari ini. | JWT  |
+| Method | Endpoint                           | Deskripsi                                                                                                                       | Auth |
+| ------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| GET    | /api/reports/daily?date=YYYY-MM-DD | Laporan harian: total omset, total untung, jumlah transaksi, produk terlaris, sisa stok (FR-16–FR-20). Default date = hari ini. | JWT  |
 
 ### 8.6 Modul `restock` & `promotion` (read-only untuk FE, proses utama via cron)
 
-| Method | Endpoint                    | Deskripsi                                              | Auth |
-| ------ | --------------------------- | ------------------------------------------------------ | ---- |
-| GET    | /api/v1/restock-predictions | List prediksi restock terbaru untuk toko (FR-21–FR-22) | JWT  |
-| GET    | /api/v1/promotions          | List promotion_logs terbaru untuk toko (FR-23–FR-24)   | JWT  |
+| Method | Endpoint                 | Deskripsi                                              | Auth |
+| ------ | ------------------------ | ------------------------------------------------------ | ---- |
+| GET    | /api/restock-predictions | List prediksi restock terbaru untuk toko (FR-21–FR-22) | JWT  |
+| GET    | /api/promotions          | List promotion_logs terbaru untuk toko (FR-23–FR-24)   | JWT  |
 
 ---
 
@@ -487,7 +486,7 @@ type ExtractedItem struct {
 - Middleware JWT (`internal/shared/middleware`) memvalidasi token dan menyuntikkan `user_id` ke context request sebelum masuk ke handler.
 - Otorisasi tingkat data: setiap query di modul product/transaction/report/restock/promotion selalu difilter berdasarkan `store_id` milik user yang login (dicek lewat store-client), untuk mencegah akses lintas toko.
 - Validasi input: seluruh request body divalidasi memakai go-playground/validator berbasis struct tag sebelum diproses handler/service.
-- Data sensitif (kredensial OAuth, token) tidak di-log secara penuh oleh Logrus.
+- Data sensitif (kredensial, token) tidak di-log secara penuh oleh Logrus.
 
 ---
 
@@ -512,31 +511,6 @@ type ExtractedItem struct {
 - Dua job berjalan independen dan terjadwal terpisah: `restock_job` dan `promotion_job` (sesuai catatan PRD bahwa keduanya adalah proses berbeda).
 - Setiap job idempotent per hari — `promotion_job` mengecek kombinasi (product_id, period) sebelum insert untuk menghindari duplikasi log bila job dijalankan ulang.
 - Logging hasil tiap run cron (jumlah produk diproses, jumlah prediksi/promo baru, durasi) dicatat via Logrus untuk observabilitas.
-
----
-
-## 14. Configuration Management
-
-Konfigurasi dibaca lewat Viper, mendukung `config.json` dan override lewat environment variable (untuk kebutuhan Docker/production).
-
-```json
-// config.json (contoh)
-{
-  "app": { "port": 8080, "env": "development" },
-  "database": {
-    "driver": "mysql",
-    "dsn": "user:pass@tcp(db:3306)/smart_commerce"
-  },
-  "jwt": { "secret": "changeme", "expiry_hours": 24 },
-  "ml_service": { "base_url": "http://ml-service:9000", "timeout_seconds": 15 },
-  "cron": {
-    "restock_schedule": "0 0 23 * * *",
-    "promotion_schedule": "0 30 23 * * *",
-    "restock_threshold_days": 3,
-    "promotion_qty_threshold": 10
-  }
-}
-```
 
 ---
 
