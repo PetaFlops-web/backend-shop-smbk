@@ -14,7 +14,6 @@ import (
 
 type Module struct {
 	Controller *controller.AuthController
-	UseCase    *usecase.AuthUseCase
 	client     *clientImpl
 	db         *gorm.DB
 }
@@ -26,7 +25,6 @@ func New(db *gorm.DB, log *logrus.Logger, validate *validator.Validate, config *
 
 	return &Module{
 		Controller: authController,
-		UseCase:    authUseCase,
 		client:     &clientImpl{db: db},
 		db:         db,
 	}
