@@ -5,10 +5,10 @@ import (
 )
 
 func (m *Module) RegisterRoutes(router fiber.Router, authMiddleware fiber.Handler) {
-	authRouter := router.Group("/auth")
-	authRouter.Post("/register", m.Controller.Register)
-	authRouter.Post("/login", m.Controller.Login)
+	authRouter := router.Group("/users")
+	authRouter.Post("/", m.Controller.Register)
+	authRouter.Post("/_login", m.Controller.Login)
 
 	authRouter.Use(authMiddleware)
-	authRouter.Get("/current", m.Controller.Current)
+	authRouter.Get("/_current", m.Controller.Current)
 }
