@@ -29,8 +29,8 @@ func (c *clientImpl) ListByStoreID(ctx context.Context, storeId string) ([]produ
 	}
 
 	dtos := make([]product_client.ProductDTO, len(products))
-	for i, p := range products {
-		dtos[i] = *mapToDTO(&p)
+	for i, product := range products {
+		dtos[i] = *mapToDTO(&product)
 	}
 	return dtos, nil
 }
@@ -54,8 +54,8 @@ func (c *clientImpl) Search(ctx context.Context, storeId string, keyword string)
 	}
 
 	dtos := make([]product_client.ProductDTO, len(products))
-	for i, p := range products {
-		dtos[i] = *mapToDTO(&p)
+	for i, product := range products {
+		dtos[i] = *mapToDTO(&product)
 	}
 	return dtos, nil
 }
