@@ -9,10 +9,10 @@
 
 Tiga dokumen berikut adalah **pedoman utama** proyek ini. Semua keputusan teknis harus bisa ditelusuri balik (traceable) ke salah satu dari ketiganya:
 
-| Dokumen | Fungsi |
-| --- | --- |
-| [`docs/prd.md`](docs/prd.md) | Product Requirements — FR-ID, user flow, data model, prioritas |
-| [`docs/sdd.md`](docs/sdd.md) | System Design — arsitektur, schema, API, business logic, tech stack |
+| Dokumen                                    | Fungsi                                                               |
+| ------------------------------------------ | -------------------------------------------------------------------- |
+| [`docs/prd.md`](docs/prd.md)               | Product Requirements — FR-ID, user flow, data model, prioritas       |
+| [`docs/sdd.md`](docs/sdd.md)               | System Design — arsitektur, schema, API, business logic, tech stack  |
 | [`docs/SYSTEM_MAP.md`](docs/SYSTEM_MAP.md) | System Map — kondisi **aktual** codebase, gap analysis, known issues |
 
 Jika suatu task tidak bisa ditelusuri ke dokumen mana pun, **tanyakan ke owner** sebelum melanjutkan.
@@ -21,7 +21,7 @@ Jika suatu task tidak bisa ditelusuri ke dokumen mana pun, **tanyakan ke owner**
 
 ## 2. Proses Kerja Wajib
 
-**Baca [`workflow.md`](.agents/workflow.md) SEBELUM memulai task apa pun.** Dokumen tersebut berisi SOP 8 tahap yang wajib diikuti tanpa pengecualian:
+**Baca [`docs/workflow.md`](docs/workflow.md) SEBELUM memulai task apa pun.** Dokumen tersebut berisi SOP 8 tahap yang wajib diikuti tanpa pengecualian:
 
 ```
 Task Intake → Reference Check → Planning → Approval Gate →
@@ -38,6 +38,7 @@ Dua prinsip inti yang tidak boleh dilanggar:
 ## 3. Task Tracking
 
 Lihat [`docs/progress.md`](docs/progress.md) untuk mengetahui:
+
 - Task mana yang sudah selesai (`[x]`) dan mana yang belum (`[ ]`)
 - Task berikutnya yang harus dikerjakan (ikuti urutan dependency modul)
 - Rujukan FR-ID / section SDD untuk setiap task
@@ -56,4 +57,4 @@ Backend menggunakan arsitektur **Modular Monolith** (Go/Golang). Aturan terpenti
 - **Validasi Input**: `go-playground/validator` via struct tags.
 - **Timestamp**: `int64` milli-epoch (GORM `autoCreateTime:milli` / `autoUpdateTime:milli`).
 
-Detail lengkap arsitektur, schema, dan API ada di [`docs/sdd.md`](docs/sdd.md). Konvensi coding detail ada di [`workflow.md §5`](.agents/workflow.md).
+Detail lengkap arsitektur, schema, dan API ada di [`docs/sdd.md`](docs/sdd.md). Konvensi coding detail ada di [`workflow.md §5`](docs/workflow.md).
