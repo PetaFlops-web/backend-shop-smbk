@@ -5,6 +5,7 @@ import (
 
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/config"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/middleware"
 	module "github.com/PetaFlops-web/backend-shop-smbk/internal/shared/modules"
@@ -40,11 +41,13 @@ func main() {
 
 	// Module initialization (ordered by dependency)
 	authModule := auth.New(db, log, validate, viperConfig)
+	storeModule := store.New(db, validate)
 	productModule := product.New(db, log, validate, viperConfig)
 
 	// Register all modules
 	modules := []module.Module{
 		authModule,
+		storeModule,
 		productModule,
 	}
 
