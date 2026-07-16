@@ -21,6 +21,16 @@ func NewAuthController(useCase *usecase.AuthUseCase, logger *logrus.Logger) *Aut
 	}
 }
 
+// Current godoc
+// @Summary      Get current logged-in user
+// @Description  Returns the profile of the currently authenticated user
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Security     BearerAuth
+// @Success      200  {object}  response.WebResponse[model.UserResponse]
+// @Failure      401  {object}  response.ApiErrorResponse
+// @Router       /users/_current [get]
 func (c *AuthController) Current(ctx *fiber.Ctx) error {
 	auth := middleware.GetUser(ctx)
 
@@ -37,6 +47,16 @@ func (c *AuthController) Current(ctx *fiber.Ctx) error {
 	})
 }
 
+// Register godoc
+// @Summary      Register a new merchant user
+// @Description  Creates a new user with username and password
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        body  body      model.RegisterRequest  true  "Register Request"
+// @Success      200   {object}  response.WebResponse[model.AuthResponse]
+// @Failure      400   {object}  response.ApiErrorResponse
+// @Router       /users [post]
 func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	request := new(model.RegisterRequest)
 	err := ctx.BodyParser(request)
@@ -58,6 +78,17 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	})
 }
 
+// Login godoc
+// @Summary      Login merchant user
+// @Description  Authenticates a user and returns a JWT token
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        body  body      model.LoginRequest  true  "Login Request"
+// @Success      200   {object}  response.WebResponse[model.AuthResponse]
+// @Failure      400   {object}  response.ApiErrorResponse
+// @Failure      401   {object}  response.ApiErrorResponse
+// @Router       /users/_login [post]
 func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	request := new(model.LoginRequest)
 	err := ctx.BodyParser(request)

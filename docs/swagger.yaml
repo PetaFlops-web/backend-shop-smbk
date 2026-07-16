@@ -1,0 +1,184 @@
+basePath: /api
+definitions:
+  github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.AuthResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.UserResponse'
+    type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.RegisterRequest:
+    properties:
+      email:
+        maxLength: 255
+        type: string
+      password:
+        maxLength: 100
+        minLength: 6
+        type: string
+      username:
+        maxLength: 100
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.UserResponse:
+    properties:
+      created_at:
+        type: integer
+      email:
+        type: string
+      id:
+        type: string
+      updated_at:
+        type: integer
+      username:
+        type: string
+    type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse:
+    properties:
+      errors:
+        additionalProperties:
+          items:
+            type: string
+          type: array
+        type: object
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata:
+    properties:
+      page:
+        type: integer
+      size:
+        type: integer
+      total_item:
+        type: integer
+      total_page:
+        type: integer
+    type: object
+  ? github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model_AuthResponse
+  : properties:
+      data:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.AuthResponse'
+      message:
+        type: string
+      paging:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata'
+      success:
+        type: boolean
+    type: object
+  ? github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model_UserResponse
+  : properties:
+      data:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.UserResponse'
+      message:
+        type: string
+      paging:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata'
+      success:
+        type: boolean
+    type: object
+info:
+  contact: {}
+  description: API Documentation for AIC Backend.
+  title: AIC Backend API
+  version: "1.0"
+paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user with username and password
+      parameters:
+      - description: Register Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model_AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+      summary: Register a new merchant user
+      tags:
+      - Auth
+  /users/_current:
+    get:
+      consumes:
+      - application/json
+      description: Returns the profile of the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model_UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get current logged-in user
+      tags:
+      - Auth
+  /users/_login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a JWT token
+      parameters:
+      - description: Login Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model_AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+      summary: Login merchant user
+      tags:
+      - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

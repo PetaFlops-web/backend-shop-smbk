@@ -8,11 +8,19 @@ import (
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/config"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/middleware"
 	module "github.com/PetaFlops-web/backend-shop-smbk/internal/shared/modules"
+
+	_ "github.com/PetaFlops-web/backend-shop-smbk/docs"
 )
 
 // @title           AIC Backend API
 // @version         1.0
 // @description     API Documentation for AIC Backend.
+// @termsOfService  http://swagger.io/terms/
+// @contact.name    Technical Support
+// @contact.url     http://www.swagger.io/support
+// @contact.email   [EMAIL_ADDRESS]
+// @license.name    Apache 2.0
+// @license.url     http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @BasePath  /api
 
