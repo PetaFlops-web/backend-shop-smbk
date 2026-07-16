@@ -39,11 +39,11 @@ Smart Commerce adalah aplikasi web untuk membantu pedagang UMKM (toko sembako) m
 ### 1.3 Status Keseluruhan
 
 ```
-Modul Implemented : 1/7 (auth)        ████░░░░░░░░░░  ~14%
-Modul Stub        : 1/7 (product)     ░░░░░░░░░░░░░░
+Modul Implemented : 2/7 (auth, prod)  ████████░░░░░░  ~28%
+Modul Stub        : 0/7               ░░░░░░░░░░░░░░
 Modul Not Started : 5/7               ░░░░░░░░░░░░░░
-Tabel DB Aktual   : 1/7 (users)
-Endpoint Aktual   : 3/~14
+Tabel DB Aktual   : 2/7 (users, prod)
+Endpoint Aktual   : 8/~14
 ```
 
 ---
@@ -71,10 +71,10 @@ graph TB
 
     subgraph "Modules — Implemented ✅"
         AUTH["auth<br/>✅ Fully Implemented<br/>Tabel: users"]
+        PRODUCT["product<br/>✅ Fully Implemented<br/>Tabel: products"]
     end
 
     subgraph "Modules — Stub 🟡"
-        PRODUCT["product<br/>🟡 Empty Stub<br/>Folder ada, kode kosong"]
     end
 
     subgraph "Modules — Not Started ❌"
@@ -100,7 +100,7 @@ graph TB
     end
 
     MAIN --> AUTH
-    MAIN -.-> PRODUCT
+    MAIN --> PRODUCT
     MAIN -.-> STORE
     MAIN -.-> TRANSACTION
     MAIN -.-> REPORT
@@ -116,7 +116,7 @@ graph TB
     PROMOTION -.-> JOBS
 
     style AUTH fill:#2d6a4f,color:#fff
-    style PRODUCT fill:#e9c46a,color:#000
+    style PRODUCT fill:#2d6a4f,color:#fff
     style STORE fill:#e76f51,color:#fff
     style TRANSACTION fill:#e76f51,color:#fff
     style REPORT fill:#e76f51,color:#fff
@@ -165,11 +165,11 @@ graph LR
     subgraph "✅ Implemented"
         AUTH["auth"]
         AUTH_C["auth-client"]
+        PRODUCT["product"]
+        PRODUCT_C["product-client"]
     end
 
     subgraph "🟡 Stub"
-        PRODUCT["product"]
-        PRODUCT_C["product-client"]
     end
 
     subgraph "❌ Not Started"
@@ -201,8 +201,8 @@ graph LR
 
     style AUTH fill:#2d6a4f,color:#fff
     style AUTH_C fill:#2d6a4f,color:#fff
-    style PRODUCT fill:#e9c46a,color:#000
-    style PRODUCT_C fill:#e9c46a,color:#000
+    style PRODUCT fill:#2d6a4f,color:#fff
+    style PRODUCT_C fill:#2d6a4f,color:#fff
     style STORE fill:#e76f51,color:#fff
     style STORE_C fill:#e76f51,color:#fff
     style TXN fill:#e76f51,color:#fff
@@ -218,7 +218,7 @@ graph LR
 | Client Interface   | Method (SDD)                                                           | Status     |
 | ------------------ | ---------------------------------------------------------------------- | ---------- |
 | `auth-client`      | `GetUserByID(ctx, userID) → *UserDTO`                                  | ✅ Implemented |
-| `product-client`   | `GetByID`, `ListByStoreID`, `DecrementStock`, `Search`                 | 🟡 File ada, interface kosong |
+| `product-client`   | `GetByID`, `ListByStoreID`, `DecrementStock`, `Search`                 | ✅ Implemented |
 | `store-client`     | `GetStoreByOwnerID`, `GetStoreByID`                                    | ❌ Belum ada |
 | `transaction-client` | `CreateTransaction`, `ListByStoreAndDate`, `ListItemsByStoreAndDateRange` | ❌ Belum ada |
 
@@ -258,26 +258,27 @@ Backend-AIC/
 │   │   │           └── auth_usecase.go          # Register, Login, Current logic
 │   │   ├── auth-client/
 │   │   │   └── client.go                        # ✅ Interface: Client{GetUserByID}
-│   │   ├── product/                             # 🟡 EMPTY STUB
-│   │   │   ├── module.go                        # package product (kosong)
-│   │   │   ├── route.go                         # package product (kosong)
-│   │   │   ├── client_impl.go                   # package product (kosong)
+│   │   ├── product/                             # ✅ FULLY IMPLEMENTED
+│   │   │   ├── module.go                        # Wiring module
+│   │   │   ├── route.go                         # Register routes
+│   │   │   ├── client_impl.go                   # Implements product-client.Client
 │   │   │   └── src/
 │   │   │       ├── controller/
-│   │   │       │   └── product_controller.go    # package controller (kosong)
+│   │   │       │   └── product_controller.go    # Create, Get, List, Update, Delete
 │   │   │       ├── entity/
-│   │   │       │   └── product_entity.go        # package entity (kosong)
+│   │   │       │   └── product_entity.go        # GORM struct → tabel products
 │   │   │       ├── model/
-│   │   │       │   ├── product_request.go       # package model (kosong)
-│   │   │       │   ├── product_response.go      # package model (kosong)
-│   │   │       │   ├── product_params.go        # package model (kosong)
-│   │   │       │   └── converter/               # (kosong)
+│   │   │       │   ├── product_request.go       # Request DTOs
+│   │   │       │   ├── product_response.go      # Response DTOs
+│   │   │       │   ├── product_params.go        # Query params DTOs
+│   │   │       │   └── converter/
+│   │   │       │       └── product_converter.go # ProductToResponse
 │   │   │       ├── repository/
-│   │   │       │   └── product_repository.go    # package repository (kosong)
+│   │   │       │   └── product_repository.go    # Custom queries & Search
 │   │   │       └── usecase/
-│   │   │           └── product_usecase.go       # package usecase (kosong)
+│   │   │           └── product_usecase.go       # Business logic
 │   │   └── product-client/
-│   │       └── client.go                        # package product_client (kosong)
+│   │       └── client.go                        # ✅ Interface: Client
 │   └── shared/
 │       ├── config/
 │       │   ├── viper.go                         # ✅ Load config.json
@@ -300,7 +301,9 @@ Backend-AIC/
 ├── db/
 │   └── migrations/
 │       ├── 20260709160912_create_table_users.up.sql    # ✅ CREATE TABLE users
-│       └── 20260709160912_create_table_users.down.sql  # ✅ DROP TABLE users
+│       ├── 20260709160912_create_table_users.down.sql  # ✅ DROP TABLE users
+│       ├── 20260715230900_create_table_products.up.sql # ✅ CREATE TABLE products
+│       └── 20260715230900_create_table_products.down.sql # ✅ DROP TABLE products
 ├── docs/
 │   ├── PRD.md
 │   ├── SDD.md
@@ -332,7 +335,7 @@ Backend-AIC/
 | --- | --- | --- | --- | --- | --- |
 | `auth` | ✅ Implemented | `users` | 3 aktif | FR-01 (partial) | §3, §6.1, §8.1 |
 | `store` | ❌ Not Started | `stores` (planned) | 0 / 2 planned | FR-02 | §3, §6.2, §8.2 |
-| `product` | 🟡 Empty Stub | `products` (planned) | 0 / 5 planned | FR-03, FR-04, FR-05 | §3, §6.3, §8.3 |
+| `product` | ✅ Implemented | `products` | 5 aktif | FR-03, FR-04, FR-05 | §3, §6.3, §8.3 |
 | `transaction` | ❌ Not Started | `transactions`, `transaction_items` (planned) | 0 / 4 planned | FR-05–FR-15 | §3, §6.4–6.5, §8.4 |
 | `report` | ❌ Not Started | — (query via client) | 0 / 1 planned | FR-16–FR-20 | §3, §8.5 |
 | `restock` | ❌ Not Started | `restock_predictions` (planned) | 0 / 1 planned | FR-21–FR-22 | §3, §6.6, §8.6 |
@@ -350,6 +353,11 @@ Backend-AIC/
 | `POST` | `/api/users/_login` | auth | Login (username/password → JWT) | — | ✅ Implemented | FR-01 (modified) |
 | `GET` | `/api/users/_current` | auth | Profil user yang sedang login | JWT | ✅ Implemented | FR-01 |
 | `GET` | `/swagger/*` | shared/config | Swagger UI | — | ✅ Implemented | — |
+| `POST` | `/api/products` | product | Tambah produk | JWT | ✅ Implemented | FR-03 |
+| `GET` | `/api/products` | product | List produk (paginated) | JWT | ✅ Implemented | FR-03 |
+| `GET` | `/api/products/:id` | product | Detail produk | JWT | ✅ Implemented | — |
+| `PUT` | `/api/products/:id` | product | Update produk | JWT | ✅ Implemented | — |
+| `DELETE` | `/api/products/:id` | product | Hapus produk | JWT | ✅ Implemented | — |
 
 ### 6.2 Endpoint Planned (Belum Ada di Codebase)
 
@@ -357,11 +365,7 @@ Backend-AIC/
 | --- | --- | --- | --- | --- | --- | --- |
 | `POST` | `/api/stores` | store | Buat toko baru | ❌ | FR-02 | §8.2 |
 | `GET` | `/api/stores` | store | Ambil toko milik user | ❌ | FR-02 | §8.2 |
-| `POST` | `/api/products` | product | Tambah produk | ❌ | FR-03 | §8.3 |
-| `GET` | `/api/products` | product | List produk (paginated) | ❌ | FR-03 | §8.3 |
-| `GET` | `/api/products/:id` | product | Detail produk | ❌ | — | §8.3 |
-| `PUT` | `/api/products/:id` | product | Update produk | ❌ | — | §8.3 |
-| `DELETE` | `/api/products/:id` | product | Hapus produk | ❌ | — | §8.3 |
+
 | `POST` | `/api/transactions/extract/voice` | transaction | Upload audio → ML → preview | ❌ | FR-06–FR-10 | §8.4 |
 | `POST` | `/api/transactions/extract/photo` | transaction | Upload foto → ML → preview | ❌ | FR-12–FR-15 | §8.4 |
 | `POST` | `/api/transactions` | transaction | Konfirmasi & simpan transaksi | ❌ | FR-11, FR-05 | §8.4 |
@@ -396,6 +400,22 @@ Backend-AIC/
 
 > **Known Issue (OQ-9)**: GORM entity mendefinisikan `username varchar(100)` dan `email varchar(255)`, tapi SQL migration mendefinisikan `varchar(50)` dan `varchar(100)`. **Keputusan: SQL migration yang benar** — GORM entity perlu diupdate agar cocok.
 
+### 7.1.2 Tabel `products` — ✅ Implemented (Modul `product`)
+
+**Source**: GORM entity (`product_entity.go`) + SQL migration (`20260715230900_create_table_products.up.sql`)
+
+| Field | Tipe (GORM Entity) | Tipe (SQL Migration) | GORM Tags | Catatan |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | `VARCHAR(36)` | `primaryKey` | Custom format |
+| `store_id` | `string` | `VARCHAR(36)` | `not null` | Reference ke stores.id (plain ID) |
+| `product_name` | `string` | `VARCHAR(255)` | `not null` | Nama produk |
+| `cost_price` | `int64` | `BIGINT` | `not null;default:0` | Harga modal (rupiah, tanpa desimal) |
+| `selling_price` | `int64` | `BIGINT` | `not null;default:0` | Harga jual |
+| `stock` | `int` | `INT` | `not null;default:0` | Stok saat ini |
+| `unit` | `string` | `VARCHAR(50)` | `not null` | Satuan (kg, pcs, dll) |
+| `created_at` | `int64` | `BIGINT` | `autoCreateTime:milli` | Milli-epoch |
+| `updated_at` | `int64` | `BIGINT` | `autoUpdateTime:milli` | Milli-epoch |
+
 ### 7.2 Tabel yang Direncanakan (Belum Ada di Codebase)
 
 Berikut schema yang direncanakan di SDD, belum ada kode/migration-nya:
@@ -412,21 +432,6 @@ Berikut schema yang direncanakan di SDD, belum ada kode/migration-nya:
 
 > Ref SDD §6.2
 
-#### Tabel `products` (Modul `product` — 🟡 Stub, belum ada entity)
-
-| Field | Tipe | Keterangan |
-| --- | --- | --- |
-| `id` | string (custom format) | Primary key |
-| `store_id` | string | Reference ke stores.id (plain ID) |
-| `product_name` | string | Nama produk |
-| `cost_price` | bigint | Harga modal (rupiah, tanpa desimal) |
-| `selling_price` | bigint | Harga jual |
-| `stock` | int | Stok saat ini, di-decrement tiap transaksi |
-| `unit` | string | kg, pcs, liter, dll. |
-| `created_at` | BIGINT | Milli-epoch |
-| `updated_at` | BIGINT | Milli-epoch |
-
-> Ref SDD §6.3
 
 #### Tabel `transactions` (Modul `transaction` — ❌ Not Started)
 
@@ -1029,6 +1034,14 @@ Login hanya melakukan `SELECT` (read-only), tapi kode membuka `tx.Begin()` dan `
 
 **Rekomendasi**: Gunakan `db.WithContext(ctx)` langsung tanpa `Begin()`/`Commit()`.
 
+### 13.4 Product Module Belum Memvalidasi Kepemilikan Store ID
+
+**File**: `internal/module/product/src/usecase/product_usecase.go` dan `product_controller.go`
+
+**Impact**: Saat ini endpoint Product menerima `store_id` (via body atau query) dan memercayainya tanpa melakukan pengecekan kepemilikan. Seharusnya (sesuai SDD §11), `product` modul perlu mengecek ke modul `store` via `store-client` untuk memastikan bahwa `store_id` tersebut benar-benar milik user yang saat ini sedang login. Karena modul `store` belum diimplementasikan, validasi ini hilang.
+
+**Rekomendasi**: Setelah modul `store` diimplementasikan, tambahkan pemanggilan `store-client.GetStoreByOwnerID` atau `GetStoreByID` untuk memverifikasi hak akses pada `store_id` di request.
+
 ---
 
 ## 14. Pending Action Items (Ringkasan)
@@ -1041,7 +1054,6 @@ Berdasarkan gap analysis, berikut action items yang perlu dikerjakan:
 | 2 | Fix bug `CountByUsername` query | High | §13.1 |
 | 3 | Fix GORM entity field length (username=50, email=100) | Medium | §13.2, OQ-9 |
 | 4 | Build modul `store` | High | FR-02, dependency modul lain |
-| 5 | Build modul `product` (dari stub) | High | FR-03–FR-05 |
 | 6 | Build modul `transaction` | High | FR-05–FR-15 |
 | 7 | Build modul `report` | High | FR-16–FR-20 |
 | 8 | Build modul `restock` + cron job | Medium | FR-21–FR-22 |

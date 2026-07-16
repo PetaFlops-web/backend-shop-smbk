@@ -3,6 +3,7 @@
 > **Referensi**: [prd.md](prd.md) | [sdd.md](sdd.md) | [SYSTEM_MAP.md](SYSTEM_MAP.md) | [workflow.md](../.agents/workflow.md)
 >
 > File ini adalah **satu-satunya tempat** tracking task teknis yang bisa dicentang.
+>
 > - `[x]` = done
 > - `[ ]` = belum dimulai / belum selesai
 > - Setiap task mencantumkan rujukan FR-ID (prd.md) dan/atau section SDD.
@@ -12,19 +13,19 @@
 
 ## Ringkasan Status
 
-| # | Modul | Done | Total | Status |
-|---|-------|------|-------|--------|
-| 1 | Shared / Infrastructure | 8 | 9 | 🟢 Hampir selesai |
-| 2 | Auth | 8 | 11 | 🟡 Bug fix pending |
-| 3 | Store | 0 | 7 | ❌ Belum dimulai |
-| 4 | Product | 0 | 10 | 🟡 Scaffold ada (branch `feature/product-module`), kode kosong |
-| 5 | Transaction | 0 | 10 | ❌ Belum dimulai |
-| 6 | ML Client / Integration | 0 | 2 | ❌ Belum dimulai |
-| 7 | Report | 0 | 3 | ❌ Belum dimulai |
-| 8 | Restock | 0 | 6 | ❌ Belum dimulai |
-| 9 | Promotion | 0 | 6 | ❌ Belum dimulai |
-| 10 | Cron / Scheduler | 0 | 2 | ❌ Belum dimulai |
-| | **TOTAL** | **16** | **66** | **~24%** |
+| #   | Modul                   | Done   | Total  | Status                                                         |
+| --- | ----------------------- | ------ | ------ | -------------------------------------------------------------- |
+| 1   | Shared / Infrastructure | 8      | 9      | 🟢 Hampir selesai                                              |
+| 2   | Auth                    | 8      | 11     | 🟡 Bug fix pending                                             |
+| 3   | Store                   | 0      | 7      | ❌ Belum dimulai                                               |
+| 4   | Product                 | 10     | 10     | ✅ Selesai diimplementasi                                        |
+| 5   | Transaction             | 0      | 10     | ❌ Belum dimulai                                               |
+| 6   | ML Client / Integration | 0      | 2      | ❌ Belum dimulai                                               |
+| 7   | Report                  | 0      | 3      | ❌ Belum dimulai                                               |
+| 8   | Restock                 | 0      | 6      | ❌ Belum dimulai                                               |
+| 9   | Promotion               | 0      | 6      | ❌ Belum dimulai                                               |
+| 10  | Cron / Scheduler        | 0      | 2      | ❌ Belum dimulai                                               |
+|     | **TOTAL**               | **26** | **66** | **~39%**                                                       |
 
 ---
 
@@ -57,7 +58,7 @@
 - [x] ID generation utility (`generate_user_id.go`) — codebase convention
 - [x] Swagger setup (fiber-swagger, route `/swagger/*`) — codebase
 - [x] Dockerfile (multi-stage) + docker-compose.yml — SDD §16
-- [ ] Rename `internal/module/` → `internal/modules/` *(owner handle di branch `chore/setup-project`)* — SYSTEM_MAP §14 #1
+- [x] Rename `internal/module/` → `internal/modules/` _(owner handle di branch `chore/setup-project`)_ — SYSTEM_MAP §14 #1
 
 ---
 
@@ -91,18 +92,17 @@
 
 ### 4. Product Module
 
-> Scaffold file sudah ada di branch `feature/product-module` (semua file kosong). Implementasi dimulai dari sana.
 
-- [ ] Entity `Product` + SQL migration `create_table_products` — SDD §6.3, FR-03
-- [ ] Repository `ProductRepository` — SDD §6.3
-- [ ] Usecase `ProductUseCase` — SDD §8.3, FR-03–FR-05
-- [ ] Endpoint `POST /api/products` — Create product (FR-03) — SDD §8.3
-- [ ] Endpoint `GET /api/products` — List products, paginated — SDD §8.3
-- [ ] Endpoint `GET /api/products/:id` — Get product detail — SDD §8.3
-- [ ] Endpoint `PUT /api/products/:id` — Update product — SDD §8.3
-- [ ] Endpoint `DELETE /api/products/:id` — Delete product — SDD §8.3
-- [ ] product-client interface + client_impl (`GetByID`, `ListByStoreID`, `DecrementStock`, `Search`) — SDD §7
-- [ ] Wiring: module.go, route.go, register di main.go — SDD §2.5
+- [x] Entity `Product` + SQL migration `create_table_products` — SDD §6.3, FR-03
+- [x] Repository `ProductRepository` — SDD §6.3
+- [x] Usecase `ProductUseCase` — SDD §8.3, FR-03–FR-05
+- [x] Endpoint `POST /api/products` — Create product (FR-03) — SDD §8.3
+- [x] Endpoint `GET /api/products` — List products, paginated — SDD §8.3
+- [x] Endpoint `GET /api/products/:id` — Get product detail — SDD §8.3
+- [x] Endpoint `PUT /api/products/:id` — Update product — SDD §8.3
+- [x] Endpoint `DELETE /api/products/:id` — Delete product — SDD §8.3
+- [x] product-client interface + client_impl (`GetByID`, `ListByStoreID`, `DecrementStock`, `Search`) — SDD §7
+- [x] Wiring: module.go, route.go, register di main.go — SDD §2.5
 
 ---
 
