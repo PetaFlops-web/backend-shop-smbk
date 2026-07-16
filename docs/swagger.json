@@ -3,11 +3,304 @@
     "info": {
         "description": "API Documentation for AIC Backend.",
         "title": "AIC Backend API",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Technical Support",
+            "url": "http://www.swagger.io/support",
+            "email": "[EMAIL_ADDRESS]"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "1.0"
     },
     "basePath": "/api",
     "paths": {
+        "/products": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mencari dan menampilkan daftar produk untuk suatu toko",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Menampilkan daftar produk dengan pagination",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Store ID",
+                        "name": "store_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Keyword nama produk",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Nomor Halaman",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Ukuran Halaman",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-array_github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Membuat entri produk baru untuk toko tertentu",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Menambahkan data produk baru",
+                "parameters": [
+                    {
+                        "description": "Data Produk",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.CreateProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengambil data produk berdasarkan ID dan Store ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Menampilkan detail satu produk",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Store ID",
+                        "name": "store_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengubah detail produk berdasarkan ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Mengubah data produk yang sudah ada",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data Produk",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.UpdateProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Menghapus data produk berdasarkan ID dan Store ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Menghapus produk",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Store ID",
+                        "name": "store_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "description": "Creates a new user with username and password",
@@ -199,6 +492,102 @@
                 }
             }
         },
+        "github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.CreateProductRequest": {
+            "type": "object",
+            "required": [
+                "product_name",
+                "selling_price",
+                "store_id",
+                "unit"
+            ],
+            "properties": {
+                "cost_price": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "selling_price": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "stock": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "store_id": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.ProductResponse": {
+            "type": "object",
+            "properties": {
+                "cost_price": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "selling_price": {
+                    "type": "integer"
+                },
+                "stock": {
+                    "type": "integer"
+                },
+                "store_id": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.UpdateProductRequest": {
+            "type": "object",
+            "required": [
+                "product_name",
+                "selling_price",
+                "store_id",
+                "unit"
+            ],
+            "properties": {
+                "cost_price": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "selling_price": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "stock": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "store_id": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse": {
             "type": "object",
             "properties": {
@@ -236,6 +625,41 @@
                 }
             }
         },
+        "github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-any": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "paging": {
+                    "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-array_github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.ProductResponse"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "paging": {
+                    "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
         "github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model_AuthResponse": {
             "type": "object",
             "properties": {
@@ -258,6 +682,23 @@
             "properties": {
                 "data": {
                     "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model.UserResponse"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "paging": {
+                    "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.ProductResponse"
                 },
                 "message": {
                     "type": "string"

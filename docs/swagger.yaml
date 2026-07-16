@@ -47,6 +47,73 @@ definitions:
       username:
         type: string
     type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.CreateProductRequest:
+    properties:
+      cost_price:
+        minimum: 0
+        type: integer
+      product_name:
+        type: string
+      selling_price:
+        minimum: 0
+        type: integer
+      stock:
+        minimum: 0
+        type: integer
+      store_id:
+        type: string
+      unit:
+        type: string
+    required:
+    - product_name
+    - selling_price
+    - store_id
+    - unit
+    type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.ProductResponse:
+    properties:
+      cost_price:
+        type: integer
+      created_at:
+        type: integer
+      id:
+        type: string
+      product_name:
+        type: string
+      selling_price:
+        type: integer
+      stock:
+        type: integer
+      store_id:
+        type: string
+      unit:
+        type: string
+      updated_at:
+        type: integer
+    type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.UpdateProductRequest:
+    properties:
+      cost_price:
+        minimum: 0
+        type: integer
+      product_name:
+        type: string
+      selling_price:
+        minimum: 0
+        type: integer
+      stock:
+        minimum: 0
+        type: integer
+      store_id:
+        type: string
+      unit:
+        type: string
+    required:
+    - product_name
+    - selling_price
+    - store_id
+    - unit
+    type: object
   github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse:
     properties:
       errors:
@@ -71,6 +138,29 @@ definitions:
       total_page:
         type: integer
     type: object
+  github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-any:
+    properties:
+      data: {}
+      message:
+        type: string
+      paging:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata'
+      success:
+        type: boolean
+    type: object
+  ? github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-array_github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse
+  : properties:
+      data:
+        items:
+          $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.ProductResponse'
+        type: array
+      message:
+        type: string
+      paging:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata'
+      success:
+        type: boolean
+    type: object
   ? github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_auth_src_model_AuthResponse
   : properties:
       data:
@@ -93,12 +183,213 @@ definitions:
       success:
         type: boolean
     type: object
+  ? github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse
+  : properties:
+      data:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.ProductResponse'
+      message:
+        type: string
+      paging:
+        $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.PageMetadata'
+      success:
+        type: boolean
+    type: object
 info:
-  contact: {}
+  contact:
+    email: '[EMAIL_ADDRESS]'
+    name: Technical Support
+    url: http://www.swagger.io/support
   description: API Documentation for AIC Backend.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
   title: AIC Backend API
   version: "1.0"
 paths:
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Mencari dan menampilkan daftar produk untuk suatu toko
+      parameters:
+      - description: Store ID
+        in: query
+        name: store_id
+        required: true
+        type: string
+      - description: Keyword nama produk
+        in: query
+        name: name
+        type: string
+      - default: 1
+        description: Nomor Halaman
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Ukuran Halaman
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-array_github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Menampilkan daftar produk dengan pagination
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      description: Membuat entri produk baru untuk toko tertentu
+      parameters:
+      - description: Data Produk
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Menambahkan data produk baru
+      tags:
+      - Product
+  /products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Menghapus data produk berdasarkan ID dan Store ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Store ID
+        in: query
+        name: store_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-any'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Menghapus produk
+      tags:
+      - Product
+    get:
+      consumes:
+      - application/json
+      description: Mengambil data produk berdasarkan ID dan Store ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Store ID
+        in: query
+        name: store_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Menampilkan detail satu produk
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      description: Mengubah detail produk berdasarkan ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Data Produk
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.WebResponse-github_com_PetaFlops-web_backend-shop-smbk_internal_modules_product_src_model_ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_PetaFlops-web_backend-shop-smbk_internal_shared_response.ApiErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Mengubah data produk yang sudah ada
+      tags:
+      - Product
   /users:
     post:
       consumes:
