@@ -1,7 +1,7 @@
 package store
 
 import (
-	store_client "github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store/client"
+	store_client "github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store-client"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store/src/controller"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store/src/entity"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store/src/repository"
