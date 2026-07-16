@@ -3,8 +3,8 @@ package auth
 import (
 	"context"
 
-	auth_client "github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth-client"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/entity"
+	auth_client "github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth-client"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/entity"
 	"gorm.io/gorm"
 )
 

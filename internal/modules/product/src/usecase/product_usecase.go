@@ -3,10 +3,10 @@ package usecase
 import (
 	"context"
 
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/entity"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/model"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/model/converter"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/repository"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/entity"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/model"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/model/converter"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/repository"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/utils"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"

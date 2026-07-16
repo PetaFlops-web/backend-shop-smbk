@@ -1,11 +1,11 @@
 package product
 
 import (
-	product_client "github.com/PetaFlops-web/backend-shop-smbk/internal/module/product-client"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/controller"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/entity"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/repository"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/usecase"
+	product_client "github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product-client"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/controller"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/entity"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/repository"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/usecase"
 	"github.com/go-playground/validator/v10"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"

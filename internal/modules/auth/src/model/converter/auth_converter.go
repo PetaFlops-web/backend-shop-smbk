@@ -1,8 +1,8 @@
 package converter
 
 import (
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/entity"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/model"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/entity"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/model"
 )
 
 func UserToResponse(user *entity.User) *model.UserResponse {

@@ -3,9 +3,9 @@ package product
 import (
 	"context"
 
-	product_client "github.com/PetaFlops-web/backend-shop-smbk/internal/module/product-client"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/entity"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/repository"
+	product_client "github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product-client"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/entity"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/repository"
 	"gorm.io/gorm"
 )
 

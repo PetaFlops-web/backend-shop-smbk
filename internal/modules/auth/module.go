@@ -1,11 +1,11 @@
 package auth
 
 import (
-	auth_client "github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth-client"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/controller"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/entity"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/repository"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/usecase"
+	auth_client "github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth-client"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/controller"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/entity"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/repository"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/usecase"
 	"github.com/go-playground/validator/v10"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"

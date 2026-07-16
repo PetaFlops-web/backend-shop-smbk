@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/model"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/usecase"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/model"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/usecase"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/middleware"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/response"
 	"github.com/gofiber/fiber/v2"

@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/config"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/middleware"
-	module "github.com/PetaFlops-web/backend-shop-smbk/internal/shared/module"
+	module "github.com/PetaFlops-web/backend-shop-smbk/internal/shared/modules"
 )
 
 // @title           AIC Backend API

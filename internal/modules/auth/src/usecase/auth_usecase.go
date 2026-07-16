@@ -3,10 +3,10 @@ package usecase
 import (
 	"context"
 
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/entity"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/model"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/model/converter"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth/src/repository"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/entity"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/model"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/model/converter"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/auth/src/repository"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/middleware"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/utils"
 	"github.com/go-playground/validator/v10"

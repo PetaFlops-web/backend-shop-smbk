@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/entity"
-	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product/src/model"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/entity"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/product/src/model"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/repository"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
