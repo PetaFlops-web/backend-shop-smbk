@@ -57,13 +57,13 @@ Untuk menjalankan backend ini secara lokal di mesin Anda, ikuti langkah-langkah 
 
 ### Base URL
 Bila dijalankan secara lokal dengan konfigurasi default, Base URL API adalah:
-`http://localhost:8080`
+`http://127.0.0.1:8080`
 
 ### Dokumentasi API (Swagger)
 Seluruh daftar endpoint, parameter yang dibutuhkan (termasuk Auth header), serta struktur data request/response dapat dilihat dan diuji coba secara interaktif melalui Swagger UI.
 
 Akses Swagger UI melalui browser di:
-👉 **[http://localhost:8080/swagger/](http://localhost:8080/swagger/)**
+👉 **[http://127.0.0.1:8080/swagger/](http://127.0.0.1:8080/swagger/)**
 
 ### Standar Response API
 Setiap endpoint API selalu mengembalikan format JSON standar berikut:
