@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/auth"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/module/product"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/config"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/shared/middleware"
 	module "github.com/PetaFlops-web/backend-shop-smbk/internal/shared/module"
@@ -31,10 +32,12 @@ func main() {
 
 	// Module initialization (ordered by dependency)
 	authModule := auth.New(db, log, validate, viperConfig)
+	productModule := product.New(db, log, validate, viperConfig)
 
 	// Register all modules
 	modules := []module.Module{
 		authModule,
+		productModule,
 	}
 
 	// Auto-migration (each module migrates its own tables)
