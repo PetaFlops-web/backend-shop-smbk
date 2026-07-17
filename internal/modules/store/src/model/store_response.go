@@ -1,13 +1,5 @@
 package model
 
-type CreateStoreRequest struct {
-	StoreName string `json:"store_name" validate:"required,min=3"`
-}
-
-type UpdateStoreRequest struct {
-	StoreName string `json:"store_name" validate:"required,min=3"`
-}
-
 type StoreResponse struct {
 	ID        string `json:"id"`
 	UserID    string `json:"user_id"`

@@ -5,96 +5,105 @@ import (
 
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store/src/entity"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store/src/model"
+	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store/src/model/converter"
 	"github.com/PetaFlops-web/backend-shop-smbk/internal/modules/store/src/repository"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
-type StoreUseCase interface {
-	Create(ctx context.Context, userID string, request *model.CreateStoreRequest) (*model.StoreResponse, error)
-	GetMyStore(ctx context.Context, userID string) (*model.StoreResponse, error)
-	UpdateMyStore(ctx context.Context, userID string, request *model.UpdateStoreRequest) (*model.StoreResponse, error)
+type StoreUseCase struct {
+	DB 			 *gorm.DB
+	Log 		 *logrus.Logger
+	Validate 	 *validator.Validate
+	StoreRepo    *repository.StoreRepository
 }
 
-type storeUseCaseImpl struct {
-	repo     repository.StoreRepository
-	validate *validator.Validate
-}
-
-func NewStoreUseCase(repo repository.StoreRepository, validate *validator.Validate) StoreUseCase {
-	return &storeUseCaseImpl{
-		repo:     repo,
-		validate: validate,
+func NewStoreUseCase(
+	db *gorm.DB, log *logrus.Logger, validate *validator.Validate, storeRepo *repository.StoreRepository) *StoreUseCase {
+	return &StoreUseCase{
+		DB:        db,
+		Log:       log,
+		Validate:  validate,
+		StoreRepo: storeRepo,
 	}
 }
 
-func (u *storeUseCaseImpl) Create(ctx context.Context, userID string, request *model.CreateStoreRequest) (*model.StoreResponse, error) {
-	if err := u.validate.Struct(request); err != nil {
-		return nil, fiber.NewError(fiber.StatusBadRequest, err.Error())
+func (u *StoreUseCase) Create(ctx context.Context, request *model.StoreRequest) (*model.StoreResponse, error) {
+	tx := u.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := u.Validate.Struct(request); err != nil {
+		u.Log.Warnf("Invalid request body : %+v", err)
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Format data request tidak valid")
 	}
 
-	existingStore, err := u.repo.FindByUserID(ctx, userID)
-	if err == nil && existingStore != nil {
+	existingStore := new(entity.Store)
+	if err := u.StoreRepo.FindByUserID(tx, existingStore, request.UserID); err == nil {
+		u.Log.Warnf("User already has a store : %+v", err)
 		return nil, fiber.NewError(fiber.StatusConflict, "User already has a store")
-	} else if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, err
 	}
 
 	store := &entity.Store{
 		ID:        uuid.New().String(),
-		UserID:    userID,
+		UserID:    request.UserID,
 		StoreName: request.StoreName,
 	}
 
-	if err := u.repo.Create(ctx, store); err != nil {
-		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to create store")
+	if err := u.StoreRepo.Create(tx, store); err != nil {
+		u.Log.Warnf("Failed to create store : %+v", err)
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Gagal membuat toko")
 	}
 
-	return toStoreResponse(store), nil
+	if err := tx.Commit().Error; err != nil {
+		u.Log.Warnf("Failed commit transaction : %+v", err)
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Gagal menyimpan data toko")
+	}
+
+	return converter.StoreToResponse(store), nil
 }
 
-func (u *storeUseCaseImpl) GetMyStore(ctx context.Context, userID string) (*model.StoreResponse, error) {
-	store, err := u.repo.FindByUserID(ctx, userID)
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, fiber.NewError(fiber.StatusNotFound, "Store not found")
-		}
-		return nil, err
+func (u *StoreUseCase) Get(ctx context.Context, userID string, storeID string) (*model.StoreResponse, error) {
+	tx := u.DB.WithContext(ctx)
+
+	store := new(entity.Store)
+	if err := u.StoreRepo.FindByIdAndUserID(tx, store, storeID, userID); err != nil {
+		u.Log.Warnf("Failed to find store : %+v", err)
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Gagal mencari data toko")
 	}
 
-	return toStoreResponse(store), nil
+	return converter.StoreToResponse(store), nil
 }
 
-func (u *storeUseCaseImpl) UpdateMyStore(ctx context.Context, userID string, request *model.UpdateStoreRequest) (*model.StoreResponse, error) {
-	if err := u.validate.Struct(request); err != nil {
-		return nil, fiber.NewError(fiber.StatusBadRequest, err.Error())
+func (u *StoreUseCase) Update(ctx context.Context, request *model.StoreRequest) (*model.StoreResponse, error) {
+	tx := u.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := u.Validate.Struct(request); err != nil {
+		u.Log.Warnf("Invalid request body : %+v", err)
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Format data request tidak valid")
 	}
 
-	store, err := u.repo.FindByUserID(ctx, userID)
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, fiber.NewError(fiber.StatusNotFound, "Store not found")
-		}
-		return nil, err
+	store := new(entity.Store)
+	if err := u.StoreRepo.FindByIdAndUserID(tx, store, request.ID, request.UserID); err != nil {
+		u.Log.Warnf("Failed to find store : %+v", err)
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Gagal mencari data toko")
 	}
 
 	store.StoreName = request.StoreName
 
-	if err := u.repo.Update(ctx, store); err != nil {
-		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to update store")
+	if err := u.StoreRepo.Update(tx, store); err != nil {
+		u.Log.Warnf("Failed to update store : %+v", err)
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Gagal memperbarui data toko")
 	}
 
-	return toStoreResponse(store), nil
+	if err := tx.Commit().Error; err != nil {
+		u.Log.Warnf("Failed commit transaction : %+v", err)
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Gagal menyimpan data toko")
+	}
+
+	return converter.StoreToResponse(store), nil
 }
 
-func toStoreResponse(store *entity.Store) *model.StoreResponse {
-	return &model.StoreResponse{
-		ID:        store.ID,
-		UserID:    store.UserID,
-		StoreName: store.StoreName,
-		CreatedAt: store.CreatedAt,
-		UpdatedAt: store.UpdatedAt,
-	}
-}
