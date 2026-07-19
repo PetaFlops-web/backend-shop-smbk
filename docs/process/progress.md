@@ -80,13 +80,14 @@
 
 ### 3. Store Module
 
-- [ ] Entity `Store` + SQL migration `create_table_stores` — SDD §6.2, FR-02
-- [ ] Repository `StoreRepository` — SDD §6.2
-- [ ] Usecase `StoreUseCase` — SDD §8.2, FR-02
-- [ ] Endpoint `POST /api/stores` — Create store (FR-02) — SDD §8.2
-- [ ] Endpoint `GET /api/stores` — Get store by owner (FR-02) — SDD §8.2
-- [ ] store-client interface + client_impl (`GetStoreByOwnerID`, `GetStoreByID`) — SDD §7
-- [ ] Wiring: module.go, route.go, register di main.go — SDD §2.5
+- [x] Entity `Store` + SQL migration `create_table_stores` — SDD §6.2, FR-02
+- [x] Repository `StoreRepository` — SDD §6.2
+- [x] Usecase `StoreUseCase` — SDD §8.2, FR-02
+- [x] Endpoint `POST /api/stores` — Create store (FR-02) — SDD §8.2
+- [x] Endpoint `GET /api/stores` — Get store by owner (FR-02) — SDD §8.2
+- [x] Endpoint `PUT /api/stores` — Update store — SDD §8.2
+- [x] store-client interface + client_impl (`GetStoreByUserID`, `GetStoreByID`) — SDD §7
+- [x] Wiring: module.go, route.go, register di main.go — SDD §2.5
 
 ---
 
