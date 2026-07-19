@@ -28,7 +28,7 @@ func NewStoreController(useCase *usecase.StoreUseCase, logger *logrus.Logger) *S
 // @Accept       json
 // @Produce      json
 // @Security     BearerAuth
-// @Param        request body model.CreateStoreRequest true "Store details"
+// @Param        request body model.StoreRequest true "Store details"
 // @Success      200  {object}  response.WebResponse[model.StoreResponse]
 // @Failure      400  {object}  response.ApiErrorResponse
 // @Failure      401  {object}  response.ApiErrorResponse
@@ -92,7 +92,7 @@ func (c *StoreController) Get(ctx *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Security     BearerAuth
-// @Param        request body model.UpdateStoreRequest true "Store update details"
+// @Param        request body model.StoreRequest true "Store update details"
 // @Success      200  {object}  response.WebResponse[model.StoreResponse]
 // @Failure      400  {object}  response.ApiErrorResponse
 // @Failure      401  {object}  response.ApiErrorResponse
