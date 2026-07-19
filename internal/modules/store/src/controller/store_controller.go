@@ -70,7 +70,7 @@ func (c *StoreController) Create(ctx *fiber.Ctx) error {
 // @Router       /stores [get]
 func (c *StoreController) Get(ctx *fiber.Ctx) error {
 	auth := middleware.GetUser(ctx)
-	id := ctx.Params("storeId")
+	id := ctx.Params("id")
 
 	resp, err := c.UseCase.Get(ctx.UserContext(), auth.ID, id)
 	if err != nil {
@@ -106,7 +106,7 @@ func (c *StoreController) Update(ctx *fiber.Ctx) error {
 		c.Log.WithError(err).Error("error parsing request body")
 		return fiber.ErrBadRequest
 	}
-	request.ID = ctx.Params("storeId")
+	request.ID = ctx.Params("id")
 	request.UserID = auth.ID
 
 	resp, err := c.UseCase.Update(ctx.UserContext(), request)
