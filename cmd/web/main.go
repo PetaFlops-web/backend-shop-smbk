@@ -41,7 +41,7 @@ func main() {
 
 	// Module initialization (ordered by dependency)
 	authModule := auth.New(db, log, validate, viperConfig)
-	storeModule := store.New(db, validate)
+	storeModule := store.New(db, validate, log)
 	productModule := product.New(db, log, validate, viperConfig)
 
 	// Register all modules
