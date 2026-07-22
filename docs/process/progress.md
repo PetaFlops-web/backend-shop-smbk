@@ -109,8 +109,8 @@
 
 ### 5. Transaction Module
 
-- [ ] Entity `Transaction` + SQL migration `create_table_transactions` — SDD §6.4
-- [ ] Entity `TransactionItem` + SQL migration `create_table_transaction_items` — SDD §6.5
+- [x] Entity `Transaction` + SQL migration `create_table_transactions` — SDD §6.4
+- [x] Entity `TransactionItem` + SQL migration `create_table_transaction_items` — SDD §6.5
 - [ ] Repository `TransactionRepository` + `TransactionItemRepository` — SDD §6.4–6.5
 - [ ] Usecase `TransactionUseCase` — konfirmasi & preview logic — SDD §8.4, §9.1–9.2
 - [ ] Endpoint `POST /api/transactions` — Confirm & save transaction + decrement stock (FR-05, FR-11) — SDD §8.4, §9.2
