@@ -18,6 +18,26 @@ func NewTransactionItemRepository(log *logrus.Logger) *TransactionItemRepository
 	return &TransactionItemRepository{Log: log}
 }
 
+// CreateBatch inserts multiple transaction items at once.
+func (r *TransactionItemRepository) CreateBatch(db *gorm.DB, items []entity.TransactionItem) error {
+	if len(items) == 0 {
+		return nil
+	}
+	return db.Create(&items).Error
+}
+
+// FindByTransactionId retrieves all items for a specific transaction.
+func (r *TransactionItemRepository) FindByTransactionId(db *gorm.DB, transactionId string) ([]entity.TransactionItem, error) {
+	var items []entity.TransactionItem
+	err := db.Where("transaction_id = ?", transactionId).Find(&items).Error
+	return items, err
+}
+
+// DeleteByTransactionId deletes all items belonging to a transaction.
+func (r *TransactionItemRepository) DeleteByTransactionId(db *gorm.DB, transactionId string) error {
+	return db.Where("transaction_id = ?", transactionId).Delete(&entity.TransactionItem{}).Error
+}
+
 // ListItemsByStoreAndDate mengambil semua item yang terjual di suatu toko pada hari tertentu
 // Digunakan oleh modul Report
 func (r *TransactionItemRepository) ListItemsByStoreAndDate(db *gorm.DB, storeId string, date string) ([]entity.TransactionItem, error) {
